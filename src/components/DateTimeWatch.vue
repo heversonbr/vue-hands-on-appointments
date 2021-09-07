@@ -5,6 +5,7 @@
     </div>
 </template>
 <script>
+
 export default {
 
     name: 'DateTimeWatch',
@@ -20,13 +21,13 @@ export default {
 
     watch:{
 
-        currentTime(newValue, oldValue){
+        currentTime(newValue){
             // console.log(' DataTimeWatch.vue : currentTime changed');
             this.$emit('time-changed', newValue);
             // console.log(' DataTimeWatch.vue : this.$emit() ');
         },
 
-        currentDate(newValue, oldValue){
+        currentDate(newValue){
             // console.log(' DataTimeWatch.vue : currentDate changed');
             this.$emit('date-changed', newValue);
           

@@ -24,11 +24,17 @@
             <h3>Scheduled for today</h3>
             <ul>
                 <div v-for="rdv in todaysAppointments" v-bind:key="rdv.id" >
-                    <li  class="todays-rdv-items">
+                    <li class="todays-rdv-items">
+                        <p v-bind:class="rdv.status=='completed' ? 'todays-rdv-items-done' : ''">  {{rdv.f_name}} {{rdv.l_name }}</p> 
+                        <p v-bind:class="rdv.status=='completed' ? 'todays-rdv-items-done' : ''">  {{rdv.time}} </p>
+                        <p v-bind:class="rdv.status=='completed' ? 'todays-rdv-items-done' : ''">  {{rdv.date}} </p> 
+                        <p>  {{rdv.status}} </p>
+                    </li>
+                    <!-- <li  class="todays-rdv-items todays-rdv-items-done">
                         <p>  {{rdv.f_name}} {{rdv.l_name }}</p> 
                         <p>  {{rdv.time}} </p>
                         <p>  {{rdv.date}} </p> 
-                    </li>
+                    </li> -->
                 </div>
             </ul>
         </div>
@@ -38,7 +44,6 @@
 
 <script>
 
-import Appointments from './Appointments.vue'
 import DateTimeWatch from './DateTimeWatch.vue';
 
 export default {
@@ -55,32 +60,40 @@ export default {
         currentDate : String,
         currentTime : String,
         tables: Array,
-        standByRdv: Array
+        standByRdv: Array,
+
+
       }
     },
 
     components: {
-        Appointments,
         DateTimeWatch
     }, 
     
     emits: ['time-changed','date-changed'],
 
     watch:{
-        appointments(newValue, oldValue){
-            console.log('Panel.vue => appointments() watch: changed ');
-    
+        appointments(){
+            console.log('Panel.vue => appointments() watch: changed ');    
         },
         currentTime(newValue){
             this.$emit('time-changed', newValue);
         },
 
-        currentDate(newValue, oldValue){
+        currentDate(newValue){
             this.$emit('date-changed', newValue);
         }
     },
     
     computed:{
+
+        todaysRdvItemClassObject: function () {
+            return {
+              'todays-rdv-items': true,
+              'todays-rdv-items-done': true
+            }
+        },
+
         todaysAppointments(){
             console.log('Panel.vue => computed todaysAppointments()');
             let selected = this.selectAppointments();
@@ -97,7 +110,7 @@ export default {
             // checks the counters array and set the variable ongoing to true if there is any rdv on going.
             // this variable is checked by the Panel.vue component, in order to display the current rdvs.
             let ongoing = false;
-            this.counters.forEach( (element, index) => {
+            this.counters.forEach( (element) => {
                 if(element.rdv != null){
                     ongoing = true;
                 }
@@ -129,6 +142,7 @@ export default {
                     rdv['l_name'] = element.last_name;
                     rdv['date'] = element.date;
                     rdv['time'] = element.time;
+                    rdv['status'] = element.status;
                     selected.push(rdv);
                 }
             });
@@ -192,9 +206,17 @@ export default {
     padding: 10px;
 }
 
+.todays-rdv-items-done{
+    text-decoration-line: line-through;
+    text-decoration-style:solid;
+    text-decoration-thickness: 2px;
+    text-decoration-color: red;
+}
+
 .current-rdvs{
     display: block;
     margin-top: 20px;
+    
     
 }
 

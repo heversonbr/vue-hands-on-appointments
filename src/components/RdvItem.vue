@@ -9,24 +9,25 @@
             <p>  {{rdvitem.status}} </p>
         </div>
 
-        <div class="item-control">
-            <p ><select v-model="selectedCounter">
-                <option  v-for="counter in counters" :value="counter.number" v-bind:key="counter.number">
-                {{ counter.number }} </option> </select>
+        <div class="item-control" >
+            <p data-toggle="tooltip" data-placement="bottom" title="Select the counter/desk to call someone">
+                <select v-model="selectedCounter" >
+                <option  v-for="counter in counters" :value="counter.number" v-bind:key="counter.number">{{ counter.number }} </option> 
+                </select>
             </p>
-            <p>
+            <p data-toggle="tooltip" data-placement="bottom" title="Click to call someone">
                 <!-- <i v-if="rdvitem.date == currentDate" class="fas fa-bell" v-on:click="callRdv({rdv: rdvitem, counter: selectedCounter})"  ></i>
                 <i v-else class="fa fa-bell bell-disable"></i> -->
                 <i v-if="rdvitem.date == currentDate && rdvitem.status == 'open'" v-bind:class="callRdvClassObject" v-on:click="callRdv({rdv: rdvitem, counter: selectedCounter})"  ></i>
                 <i v-else class="fa fa-bell bell-disable"></i>
 
             </p>
-            <p>  
+            <p data-toggle="tooltip" data-placement="bottom" title="Click to finish/complete an appointment">
                 <i v-if="rdvitem.date == currentDate && rdvitem.status == 'called'" v-bind:class="completeRdvClassObject" v-on:click="completeRdv(rdvitem)"  ></i>
                 <i v-else class="fas fa-check-circle check-disable"></i>
             </p>
             <!-- <p><i v-on:click="deleteRdv(rdvitem)" class="fas fa-times-circle" aria-hidden="true"></i></p> -->
-            <p>
+            <p data-toggle="tooltip" data-placement="bottom" title="Click to delete and appointment">
                 <i v-if="rdvitem.status == 'completed'" class="fas fa-times-circle times-circle-disable" aria-hidden="true"></i>
                 <i v-else v-on:click="deleteRdv(rdvitem)" class="fas fa-times-circle" aria-hidden="true"></i>
             </p>
@@ -44,6 +45,8 @@
 </template>
 
 <script>
+
+
 export default {
     name: 'RdvItem',
 
@@ -52,6 +55,8 @@ export default {
             selectedCounter: null,
         }
     },
+
+
 
     computed:{
         callRdvClassObject: function () {

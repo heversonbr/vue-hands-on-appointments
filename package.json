@@ -10,6 +10,7 @@
   "dependencies": {
     "axios": "^0.21.3",
     "core-js": "^3.6.5",
+    "v-tooltip": "^2.1.3",
     "vue": "^3.0.0",
     "vue-axios": "^3.2.5",
     "vue-flatpickr-component": "^9.0.5"

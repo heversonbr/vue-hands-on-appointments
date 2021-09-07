@@ -23,7 +23,6 @@ import Header from './components/Header.vue'
 import Panel from './components/Panel.vue'
 import RdvRegister from './components/RdvRegister.vue'
 import RdvManager from './components/RdvManager.vue'
-import DateTimeWatch from './components/DateTimeWatch.vue'
 import axios from 'axios';
 
 export default {
@@ -107,7 +106,7 @@ export default {
 
   watch:{
 
-    appointments(newValue){
+    appointments(){
       console.log('App.vue =>  watch: appointments changed ')
       console.log(this.appointments);
 
@@ -343,11 +342,11 @@ export default {
   updated(){
       console.log('App.vue => updated() : ');
   },
-  beforeDestroy(){
-      console.log('App.vue => beforeDestroy() : ');
+  beforeUnmount(){
+      console.log('App.vue => beforeUnmount() : ');
   },
-  destroyed(){
-      console.log('App.vue => destroyed() : ');
+  unmounted(){
+      console.log('App.vue => unmounted() : ');
   },
 
 }

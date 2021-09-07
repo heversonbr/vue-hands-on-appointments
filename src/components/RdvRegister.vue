@@ -5,13 +5,15 @@
         <form class="add-rdv" >
           <input type="text" v-model.trim="formValues.first_name" placeholder="first name" class="rdv-entry">
           <input type="text" v-model.trim="formValues.last_name"  placeholder="last name"  class="rdv-entry">
-          <flat-pickr v-model="formValues.selected_date" :config="config" placeholder="select date"></flat-pickr>
-          <div id="v-model-select-dynamic" class="time-select">
-              <select v-model="formValues.selected_time">
+          <div data-toggle="tooltip" data-placement="bottom" title="Choose the time for your appointment">
+            <flat-pickr v-model="formValues.selected_date" :config="config" placeholder="select date"></flat-pickr>
+          </div>
+           <div id="v-model-select-dynamic" class="time-select">
+              <select v-model="formValues.selected_time" data-toggle="tooltip" data-placement="bottom" title="Choose the time for your appointment">
                   <option v-for="option in formValues.time_options" v-bind:value="option" v-bind:key="option" > {{ option }} </option>
               </select>
           </div>
-          <button v-on:click="addRendezvous"> Add Rdv </button>
+          <button class="btn-add" data-toggle="tooltip" data-placement="bottom" title="Click to add a new Appointment" v-on:click="addRendezvous"> Add Rendezvous </button>
         </form>
     </div>
 </template>
@@ -45,6 +47,7 @@
     }
   },
 
+
   props: {
     title: String,
   },
@@ -60,7 +63,12 @@
     addRendezvous(event){
 
       event.preventDefault();
-      let new_rdv = {
+      console.log('add');
+      let result = this.validateFormInputs();
+      console.log('result: ' + result);
+      if(result){
+        console.log('validate');
+        let new_rdv = {
           id: null,
           first_name: this.formValues.first_name,
           last_name: this.formValues.last_name,
@@ -69,13 +77,37 @@
           status: 'open'
           // status : open, called, waiting, recalled, canceled, completed 
         }
-      this.$emit('add-rendezvous', new_rdv);
-      this.formValues.first_name = ''; 
-      this.formValues.last_name = '';
-      this.formValues.selected_date = '';
-      this.formValues.selected_time = '';
+        this.$emit('add-rendezvous', new_rdv);
+        this.cleanFormInput();
+
+
+      }else{
+        console.log('no valid');
+        alert('Missing information');
+      }
+
+    },
+    cleanFormInput(){
+    this.formValues.first_name = ''; 
+    this.formValues.last_name = '';
+    this.formValues.selected_date = '';
+    this.formValues.selected_time = '';
+    },
+
+    validateFormInputs(){
+      console.log('validating');
+      if(this.formValues.first_name == '' ||  this.formValues.last_name == '' || this.formValues.selected_date == '' || this.formValues.selected_time == ''){
+        console.log('vazio?  false');
+        return false;
+      }
+      console.log('nao vazio? true');
+      return true;
+
     }
-  }
+  },
+
+  
+
 
 }
 </script>
@@ -127,6 +159,11 @@ button{
 .time-select{
  
   margin: 10px;
+}
+
+.btn-add{
+  width: 140px;
+
 }
 
 
