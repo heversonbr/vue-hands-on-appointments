@@ -8,7 +8,7 @@ export default {
   
 
   data() {
-    return { welcome_msg: 'Vue.js Hands-on : a Simple Example of an Appointments-App' }
+    return { welcome_msg: 'Vue.js Hands-on : a simple web-app front-end for Appointments' }
   }
 
 }
@@ -24,7 +24,6 @@ h1{
     display: flex;
     justify-content: center;
     align-items: center;
-    /* font-family: 'Nunito', sans-serif; */
 }
 
 </style>

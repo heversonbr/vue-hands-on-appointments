@@ -1,4 +1,61 @@
-= Vue.js notes
+= Notes on Vue.js
+
+
+== Concepts
+
+* data(): {}
+  The functi*n that returns a data object for the component instance. *  In data, we don't recommend to observe objects with their own stateful 
+  behavior like browser API objects and prototype properties. 
+  A good idea would be to have here just a plain object that represents component data.
+
+* props: { } 
+  A list/hash of attributes that are exposed to accept data from the parent component. 
+  It has an Array-based simple syntax and an alternative Object-based syntax that allows 
+  advanced configurations such as type checking, custom validation and default values.
+
+* computed:{ } 
+  Computed properties to be mixed into the component instance. 
+
+* watch: { }
+  Watch a reactive property or a computed function on the component instance for changes. 
+  The callback gets called with the new value and the old value for the given propert
+  An object where keys are reactive properties to watch — examples include data or 
+  computed properties — and values are the corresponding callbacks. The value can 
+  also be a string of a method name, or an Object that contains additional options
+  NOTE: you should not use an arrow function to define a watcher 
+  (e.g. searchQuery: newValue => this.updateAutocomplete(newValue)). 
+  The reason is arrow functions bind the parent context, so this will not be the component 
+  instance as you expect and this.updateAutocomplete will be undefined.
+
+* methods:{}   
+  Methods to be mixed into the component instance. 
+  You can access these methods directly on the VM instance, or use them in directive expressions. 
+  All methods will have their this context automatically bound to the component instance.
+  You should not use an arrow function to define a method (e.g. plus: () => this.a++). 
+  The reason is arrow functions bind the parent context, 
+  so this will not be the component instance as you expect and this.a will be undefined.
+
+* emits: { }  
+  A list/hash of custom events that can be emitted from the component. It has an array-based 
+  simple syntax and an alternative Object-based syntax that allows to configure an event validation.
+
+* Lifecycle hooks: 
+  All lifecycle hooks automatically have their this context bound to the instance, so that you can access data, 
+  computed properties, and methods. This means you should not use an arrow function to define a lifecycle method 
+  (e.g. created: () => this.fetchTodos()). The reason is arrow functions bind the parent context, so this will 
+  not be the component instance as you expect and this.fetchTodos will be undefined.
+
+* created() { }
+  Called synchronously after the instance is created. At this stage, the instance has finished processing the options 
+  which means the following have been set up: data observation, computed properties, methods, watch/event callbacks. 
+  However, the mounting phase has not been started, and the $el property will not be available yet.
+
+* mounted() { }
+  Called after the instance has been mounted, where element, passed to app.mount is replaced by the newly created vm.$el. 
+  If the root instance is mounted to an in-document element, vm.$el will also be in-document when mounted is called.
+  Note that mounted does not guarantee that all child components have also been mounted. 
+  If you want to wait until the entire view has been rendered, you can use vm.$nextTick inside of mounted.
+
 
 == Installation
 
@@ -15,72 +72,180 @@ There are four primary ways of adding Vue.js to a project:
 $ npm install vue@next
 ----
 
-Vue provides an official CLI (opens new window) for quickly scaffolding ambitious Single Page Applications. It provides batteries-included build setups for a modern frontend workflow. It takes only a few minutes to get up and running with hot-reload, lint-on-save, and production-ready builds.
+Vue provides an official CLI (opens new window) for quickly scaffolding ambitious Single Page Applications. 
+It provides batteries-included build setups for a modern frontend workflow. 
+It takes only a few minutes to get up and running with hot-reload, lint-on-save, and production-ready builds.
 
-=== Installing and using Vue Cli
+=== Installing Vue Cli globally
 
 ----
 $ npm install -g @vue/cli
+----
+
+=== Using Vue cli
+
+==== Create a project 
+----
 $ vue create <my_project_name>
+----
+
+The command `vue create` will create a default project with the following structure:
+
+----
+.
+├── README.md
+├── babel.config.js
+├── node_modules
+├── package-lock.json
+├── package.json
+├── public
+│   ├── favicon.ico
+│   └── index.html
+├── src
+    ├── App.vue
+    ├── assets
+    │   └── logo.png
+    ├── components
+    │   └── HelloWorld.vue
+    └── main.js
+----
+
+
+We can also create a new project using the web interface with the command `vue ui`. 
+
+==== Run your project
+----
 $ cd <my_project_name>
 # code . 
 $ npm run serve
 ----
 
+we can check the new projec right away by running the command `npm run serve` in any terminal. 
 
 
-== Options
+== Creating your application
 
-- data(): {}
-  The function that returns a data object for the component instance. 
-  In data, we don't recommend to observe objects with their own stateful 
-  behavior like browser API objects and prototype properties. 
-  A good idea would be to have here just a plain object that represents component data.
+Important: The entrypoint for your application is the file `main.js`. 
+This entrypoint import the application from `App.vue` (it creates and mounts the application)
+The `App.vue` is known as `root component` of the application
+All the other components will be imported from App.vue. 
 
-- props: { } 
-  A list/hash of attributes that are exposed to accept data from the parent component. 
-  It has an Array-based simple syntax and an alternative Object-based syntax that allows 
-  advanced configurations such as type checking, custom validation and default values.
+The component system is another important concept in Vue, because it's an abstraction that allows us to build large-scale applications composed of small, self-contained, and often reusable components. 
+If we think about it, almost any type of application interface can be abstracted into a tree of components
 
-- computed:{ } 
-  Computed properties to be mixed into the component instance. 
 
-- watch: { }
-  Watch a reactive property or a computed function on the component instance for changes. 
-  The callback gets called with the new value and the old value for the given propert
-  An object where keys are reactive properties to watch — examples include data or 
-  computed properties — and values are the corresponding callbacks. The value can 
-  also be a string of a method name, or an Object that contains additional options
-  NOTE: you should not use an arrow function to define a watcher 
-  (e.g. searchQuery: newValue => this.updateAutocomplete(newValue)). 
-  The reason is arrow functions bind the parent context, so this will not be the component 
-  instance as you expect and this.updateAutocomplete will be undefined.
+=== Single File Components
 
-- methods:{}   
-  Methods to be mixed into the component instance. 
-  You can access these methods directly on the VM instance, or use them in directive expressions. 
-  All methods will have their this context automatically bound to the component instance.
-  You should not use an arrow function to define a method (e.g. plus: () => this.a++). 
-  The reason is arrow functions bind the parent context, 
-  so this will not be the component instance as you expect and this.a will be undefined.
+Vue Single File Components (aka *.vue files, abbreviated as SFC) is a special file format that allows us to encapsulate the template, logic, and styling of a Vue component in a single file. Here's an example SFC:
 
-- emits: { }  
-  A list/hash of custom events that can be emitted from the component. It has an array-based 
-  simple syntax and an alternative Object-based syntax that allows to configure an event validation.
+[source, vue]
+----
+<script>
+export default {
+  data() {
+    return {
+      greeting: 'Hello World!'
+    }
+  }
+}
+</script>
 
-- Lifecycle hooks: 
-  All lifecycle hooks automatically have their this context bound to the instance, so that you can access data, 
-  computed properties, and methods. This means you should not use an arrow function to define a lifecycle method 
-  (e.g. created: () => this.fetchTodos()). The reason is arrow functions bind the parent context, so this will 
-  not be the component instance as you expect and this.fetchTodos will be undefined.
+<template>
+  <p class="greeting">{{ greeting }}</p>
+</template>
 
-- created() { }
-  Called synchronously after the instance is created. At this stage, the instance has finished processing the options 
-  which means the following have been set up: data observation, computed properties, methods, watch/event callbacks. 
-  However, the mounting phase has not been started, and the $el property will not be available yet.
+<style>
+.greeting {
+  color: red;
+  font-weight: bold;
+}
+</style>
+----
 
-- mounted() { }
-  Called after the instance has been mounted, where element, passed to app.mount is replaced by the newly created vm.$el. 
-  If the root instance is mounted to an in-document element, vm.$el will also be in-document when mounted is called.
-  Note that mounted does not guarantee that all child components have also been mounted. 
-  If you want to wait until the entire view has been rendered, you can use vm.$nextTick inside of mounted
+As we can see, Vue SFC is a natural extension of the classic trio of HTML, CSS and JavaScript. Each *.vue file consists of three types of top-level language blocks: <template>, <script>, and <style>:
+
+* The <script> section is a standard JavaScript module. It should export a Vue component definition as its default export.
+* The <template> section defines the component's template.
+* The <style> section defines CSS associated with the component.
+
+
+=== Reminders
+
+* props 
++
+The pros component is used to receive variables passed as arguments from other components, usually from components that declare/instantiate the current component. 
++
+[source, Vue]
+.Example of props 
+----
+<script>
+export default {
+  name: "Header",
+
+  props: {
+    headerTitle: {
+      type: String,
+      default: "Task Manager",
+    },
+  },
+};
+</script>
+----
++ from the instantiating component we pass the value we want to set to the 'prop'. Example:
+
+----
+<Header headerTitle="This is my Title for Header component" />
+----
+
+* components: 
+
+Whenever we want to use a component in our application, the component must be imported and declared before using it. we should use the directory `./componentes` in our project's root. For instance we create our componente as follows:
+
+`./componentes/MyComponent.vue`
+
+Then, in order to use it we have to import it in the component that is going to use it:
+
+`import MyComponent from './components/MyComponent.vue`
+
+Last but not the least, we should declare the component in the `components` property inside the script section. As follows:
+
+----
+export default {
+  name: "App",
+  components: {
+
+    MyComponent,   
+
+  },
+};
+----
+
+* methods 
+
+The methods used by our components must be included into the `methods` property inside the `<script>` area. Ex: 
+
+----
+methods: {
+    
+    onClick(){
+      console.log('clicked!');
+    }
+  },
+----
+
+* axios:  Promise based HTTP client for the browser and node.js
+
+in order to make http requests, use `axios` library
+
+----
+$ npm install --save axios
+----
+
+then import axios in you App.vue file:
+----
+import axios from 'axios'
+----
+
+
+
+

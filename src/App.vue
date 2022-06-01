@@ -30,12 +30,12 @@ export default {
   name: 'App',
 
   components: {
-    Header,
+    Header, 
     RdvRegister,
     Panel,
     RdvManager
   },
-    // appointment structure (object):
+    //  Note: This is the structure fot our appointment structure (object):
     //  {  
     //      id: null,
     //      first_name: this.formValues.first_name,
@@ -320,7 +320,6 @@ export default {
     },
   },
 
-  
   // lifecycle hooks: 
   beforeCreate(){
       console.log('App.vue => beforeCreate() : ');
@@ -365,18 +364,6 @@ export default {
   display: block;
 }
 
-/* .date-time{
-  color: green;
-}
-
-.date-time-wathc{
-   padding: 2px;
-    margin: 0px;
-    border: 1px;
-     border-color: black;
-    border-style: dotted;
-    color: red;
-} */
 
 .content-container{
 

@@ -31,21 +31,11 @@
                 <i v-if="rdvitem.status == 'completed'" class="fas fa-times-circle times-circle-disable" aria-hidden="true"></i>
                 <i v-else v-on:click="deleteRdv(rdvitem)" class="fas fa-times-circle" aria-hidden="true"></i>
             </p>
-        
-
-
         </div>
-        
-         
-        
-
     </div>
-    
-    
 </template>
 
 <script>
-
 
 export default {
     name: 'RdvItem',
@@ -55,8 +45,6 @@ export default {
             selectedCounter: null,
         }
     },
-
-
 
     computed:{
         callRdvClassObject: function () {
@@ -75,7 +63,6 @@ export default {
               'fa-check-circle' : true,
               'check-disable': this.rdvitem.status == 'completed'
 
-               
             }
         },
     },
@@ -113,40 +100,26 @@ export default {
             console.log('rdvItem : ' + rdvitem );
             console.log('id : ' + rdvitem.id );
             this.$emit('complete-rdv', rdvitem);
-
         }
-
-        
-
-
     }
-
-
 }
 
 </script>
 
-<style scoped>
 
+<style scoped>
 
 .rdv-item{
     display: flex;
     flex-direction: column;
-    align-content: flex-end;
-
-
-    
+    align-content: flex-end; 
 }
 
 .item-info{
-
     display: flex;
     flex-direction: row;
     justify-content:space-around;
     font-family: 'Nunito', sans-serif;
-    /* margin-top: -10px; */
-
-
 }
 
 .item-control{
@@ -154,7 +127,6 @@ export default {
     flex-direction: row;
     justify-content:space-around;
     margin-top: -15px;
-
 }
 
 .fa-times-circle{

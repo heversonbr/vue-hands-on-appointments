@@ -1,0 +1,3 @@
+sync_rasp3.sh
+rsync_exclude_files.txt
+vue_notes.adoc

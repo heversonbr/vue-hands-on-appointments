@@ -95,17 +95,18 @@ export default {
         },
 
         todaysAppointments(){
-            console.log('Panel.vue => computed todaysAppointments()');
+            //console.log('Panel.vue => computed todaysAppointments()');
             let selected = this.selectAppointments();
-            console.log(selected);
+            //console.log(selected);
             if(selected!=null){
                 selected.sort(function(a,b){
                 return a.time.localeCompare(b.time) ;
             });
-            console.log(selected);
+            //console.log(selected);
             }
             return selected; 
         },
+        
         ongoingRdvs(){
             // checks the counters array and set the variable ongoing to true if there is any rdv on going.
             // this variable is checked by the Panel.vue component, in order to display the current rdvs.
@@ -119,36 +120,35 @@ export default {
         }
     },
 
-
     methods:{
 
-    setTime(newValue){
-        this.currentTime = newValue;
-    },
+        setTime(newValue){
+            this.currentTime = newValue;
+        },
 
-    setDate(newValue){
-        this.currentDate = newValue;
-    },
+        setDate(newValue){
+            this.currentDate = newValue;
+        },
 
-    selectAppointments(){
-        console.log('Panel.vue => selectAppointments()');
-        let selected = [];
-        if(this.appointments){
-            this.appointments.forEach((element) => {
-                if(element.date == this.currentDate){
-                    let rdv = {};
-                    rdv['id'] = element.id;
-                    rdv['f_name'] = element.first_name;
-                    rdv['l_name'] = element.last_name;
-                    rdv['date'] = element.date;
-                    rdv['time'] = element.time;
-                    rdv['status'] = element.status;
-                    selected.push(rdv);
-                }
-            });
+        selectAppointments(){
+            console.log('Panel.vue => selectAppointments()');
+            let selected = [];
+            if(this.appointments){
+                this.appointments.forEach((element) => {
+                    if(element.date == this.currentDate){
+                        let rdv = {};
+                        rdv['id'] = element.id;
+                        rdv['f_name'] = element.first_name;
+                        rdv['l_name'] = element.last_name;
+                        rdv['date'] = element.date;
+                        rdv['time'] = element.time;
+                        rdv['status'] = element.status;
+                        selected.push(rdv);
+                    }
+                });
+            }
+            return selected;
         }
-        return selected;
-    }
 
   },
 
@@ -169,7 +169,6 @@ export default {
     margin: 0;
     padding: 0;
     font-family: 'Nunito', sans-serif;
-
 }
 
 .my-panel{ 
@@ -216,8 +215,6 @@ export default {
 .current-rdvs{
     display: block;
     margin-top: 20px;
-    
-    
 }
 
 .current-rdv-items{
@@ -232,7 +229,6 @@ export default {
     border-color:tomato;
     margin: 5px;
     padding: 10px;
-    
 }
 
 
